@@ -27,3 +27,62 @@ from src.backup  import (create_backup_controls, create_world_backup_controls,
                          delete_world_backup, rename_world_backup,
                          update_world_backup_list,
                          inject as backup_inject)
+
+
+
+
+# -- 全局状态（数据映射已迁移到 src/data.py）-------------------
+json_files = []
+current_inventory_data = {}
+current_file_path = None
+slot_entries = []
+rune_entries = []
+skill_labels = []
+slot_checkboxes = []
+loadout_entries = []
+
+def update_slot_border(slot_frame, regular_var, gear_var):
+    # Get the current item (gear takes precedence)
+    current_item = gear_var.get() if gear_var.get() != "空" else regular_var.get()
+    
+    # Update border color based on whether slot has an item
+    if current_item != "空":
+        slot_frame.configure(bg=RS_FILLED_BORDER)
+    else:
+        slot_frame.configure(bg=RS_EMPTY_BORDER)
+
+def update_current_item_label(label, regular_var, gear_var):
+    # Get the current item (gear takes precedence)
+    current_item = gear_var.get() if gear_var.get() != "空" else regular_var.get()
+    label.configure(text=current_item)
+
+def on_item_select(event, regular_var, gear_var, slot_frame, is_regular=True):
+    # Clear the other dropdown when one is selected
+    if is_regular:
+        if regular_var.get() != "空":
+            gear_var.set("空")
+    else:
+        if gear_var.get() != "空":
+            regular_var.set("空")
+    
+    # Update the slot border
+    update_slot_border(slot_frame, regular_var, gear_var)
+
+def update_rune_slot_border(slot_frame, rune_var):
+    # Update border color based on whether slot has a rune
+    if rune_var.get() != "空":
+        slot_frame.configure(bg=RS_FILLED_BORDER)
+    else:
+        slot_frame.configure(bg=RS_EMPTY_BORDER)
+
+def update_current_rune_label(label, rune_var):
+    label.configure(text=rune_var.get())
+
+def on_rune_select(event, rune_var, slot_frame, current_rune_label):
+    # Update the current rune label
+    update_current_rune_label(current_rune_label, rune_var)
+    # Update the slot border
+    update_rune_slot_border(slot_frame, rune_var)
+
+def load_json():
+    show_character_selection()
