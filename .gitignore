@@ -172,3 +172,11 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# ── DragonMaster 本地文件 ─────────────────────────────────────
+# 存档文件（世界 + 角色备份）
+SaveGames/
+SaveCharacters/
+
+# Reasonix AI 工作目录
+.reasonix/
